@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - Simple Student Information System</title>
+      {% else %}
+      <title>Simple Student Information System</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>Simple Student Information System:
+            <a href="/">Students</a>
+            <a href="/courses">Courses</a>
+            <a href="/colleges">Colleges</a>
+        </div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>
