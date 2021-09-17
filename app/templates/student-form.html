@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Add Student</h1>
+    <!-- TODO: Remove novalidate after testing server-side validation -->
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.id.label }}<br>
+            {{ form.id(size=32) }}
+        </p>
+        <p>
+            {{ form.firstname.label }}<br>
+            {{ form.firstname(size=32) }}
+        </p>
+        <p>
+            {{ form.lastname.label }}<br>
+            {{ form.lastname(size=32) }}
+        </p>
+        <p>
+            {{ form.course.label }}<br>
+            {{ form.course() }}
+        </p>
+        <p>
+            {{ form.year.label }}<br>
+            {{ form.year(size=32) }}
+        </p>
+        <p>
+            {{ form.gender.label }}<br>
+            {{ form.gender() }}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}
