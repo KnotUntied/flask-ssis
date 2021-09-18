@@ -9,9 +9,9 @@
     </head>
     <body>
         <div>Simple Student Information System:
-            <a href="/">Students</a>
-            <a href="/courses">Courses</a>
-            <a href="/colleges">Colleges</a>
+            <a href="{{ url_for('students') }}">Students</a>
+            <a href="{{ url_for('courses') }}">Courses</a>
+            <a href="{{ url_for('colleges') }}">Colleges</a>
         </div>
         <hr>
         {% block content %}{% endblock %}

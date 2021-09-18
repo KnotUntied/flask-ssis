@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, flash, redirect
 
 from app import app
 from app.forms import StudentForm
@@ -6,7 +6,7 @@ from app.forms import StudentForm
 @app.route('/')
 @app.route('/index')
 @app.route('/students')
-def student_form():
+def students():
     # TODO: Remove placeholder list
     students = [
         {
@@ -28,9 +28,12 @@ def student_form():
     ]
     return render_template('students.html', title='Students', students=students)
 
-@app.route('/student-form')
-def students():
+@app.route('/student-form', methods=['GET', 'POST'])
+def student_form():
     form = StudentForm()
+    if form.validate_on_submit():
+        flash('{} {} {}'.format(form.id.data, form.firstname.data, form.lastname.data))
+        return redirect(url_for('students'))
     return render_template('student-form.html', title='Add Student', form=form)
 
 @app.route('/courses')
