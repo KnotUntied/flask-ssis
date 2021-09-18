@@ -7,27 +7,45 @@
         {{ form.hidden_tag() }}
         <p>
             {{ form.id.label }}<br>
-            {{ form.id(size=32) }}
+            {{ form.id(size=32) }}<br>
+            {% for error in form.id.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
         </p>
         <p>
             {{ form.firstname.label }}<br>
-            {{ form.firstname(size=32) }}
+            {{ form.firstname(size=32) }}<br>
+            {% for error in form.firstname.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
         </p>
         <p>
             {{ form.lastname.label }}<br>
-            {{ form.lastname(size=32) }}
+            {{ form.lastname(size=32) }}<br>
+            {% for error in form.lastname.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
         </p>
         <p>
             {{ form.course.label }}<br>
-            {{ form.course() }}
+            {{ form.course() }}<br>
+            {% for error in form.course.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
         </p>
         <p>
             {{ form.year.label }}<br>
-            {{ form.year(size=32) }}
+            {{ form.year(size=32) }}<br>
+            {% for error in form.year.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
         </p>
         <p>
             {{ form.gender.label }}<br>
-            {{ form.gender() }}
+            {{ form.gender() }}<br>
+            {% for error in form.gender.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
         </p>
         <p>{{ form.submit() }}</p>
     </form>
