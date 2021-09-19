@@ -16,6 +16,7 @@ class StudentForm(FlaskForm):
     id = StringField(label='ID Number (YYYY-NNNN)', validators=[DataRequired(), Regexp(regex=r'\d{4}\-\d{4}$')])
     firstname = StringField(label='First Name', validators=[DataRequired(), validate_name])
     lastname = StringField(label='Last Name', validators=[DataRequired(), validate_name])
+    # TODO: Get course list
     course = SelectField(label='Course',
         choices=['test1', 'test2', 'test3'],
         validators=[
