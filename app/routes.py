@@ -27,7 +27,13 @@ def add_student():
         db.session.commit()
         flash('{} {} {} has been added.'.format(form.id.data, form.firstname.data, form.lastname.data))
         return redirect(url_for('students'))
-    return render_template('student-form.html', title='Add Student', form=form)
+    return render_template('student_form.html', title='Add Student', form=form)
+
+# Redundant as of now, but may be expanded in the future
+@app.route('/students/<id>')
+def view_student(id):
+    student = Student.query.filter_by(id=id).first_or_404()
+    return render_template('student_view.html', user=user, posts=posts)
 
 @app.route('/courses/')
 def courses():
