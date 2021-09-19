@@ -3,6 +3,16 @@
 {% block content %}
     <h1>{{ student.id }}</h1>
     <hr>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <p><a href="{{ url_for('edit_student', id=student.id) }}">Edit</a></p>
     <p>
     {{ student.lastname }}, {{ student.firstname }}
     </p>
