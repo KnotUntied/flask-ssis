@@ -33,7 +33,7 @@ def add_student():
 @app.route('/students/<id>')
 def view_student(id):
     student = Student.query.filter_by(id=id).first_or_404()
-    return render_template('student_view.html', user=user, posts=posts)
+    return render_template('student_view.html', student=student)
 
 @app.route('/courses/')
 def courses():

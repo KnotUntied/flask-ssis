@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ student.id }}</h1>
+    <hr>
+    <p>
+    {{ student.lastname }}, {{ student.firstname }}
+    </p>
+    <p>{{ student.course }} - {{ student.year }}</p>
+    <p>{{ student.gender.name }}</p>
+{% endblock %}
