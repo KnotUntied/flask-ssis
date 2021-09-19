@@ -2,6 +2,10 @@
 
 {% block content %}
     <h1>Students</h1>
+    <div>
+        <a href="{{ url_for('add_student') }}">Add Student</a>
+    </div>
+    <hr>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul>
@@ -13,7 +17,7 @@
     {% endwith %}
     <table>
       <tr>
-        <th>ID No.</th>
+        <th>ID Number</th>
         <th>Last Name</th>
         <th>First Name</th>
         <th>Course</th>
@@ -27,7 +31,7 @@
         <td>{{ student.firstname }}</td>
         <td>{{ student.course }}</td>
         <td>{{ student.year }}</td>
-        <td>{{ student.gender }}</td>
+        <td>{{ student.gender.name }}</td>
       </tr>
       {% endfor %}
     </table>

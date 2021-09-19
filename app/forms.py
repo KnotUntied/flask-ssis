@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, SelectField, StringField, SubmitField
-from wtforms.validators import AnyOf, DataRequired, NumberRange, Regexp
+from wtforms.validators import ValidationError, AnyOf, DataRequired, NumberRange, Regexp
+from app.models import Student, Course
 
 def validate_name(form, field):
     excluded_chars = '1234567890'
@@ -29,6 +30,11 @@ class StudentForm(FlaskForm):
             AnyOf(values=['Other', 'Male', 'Female'])
         ])
     submit = SubmitField(label='Submit')
+
+    def validate_id(self, id):
+        id = Student.query.filter_by(id=id.data).first()
+        if id is not None:
+            raise ValidationError('ID number has already been used.')
 
 class CourseForm(FlaskForm):
     code = StringField(label='Course Code', validators=[DataRequired()])

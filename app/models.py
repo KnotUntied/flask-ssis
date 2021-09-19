@@ -16,6 +16,8 @@ class Student(db.Model):
     course = db.Column(db.String(10), db.ForeignKey('course.code'), nullable=False)
     year = db.Column(db.Integer, nullable=False)
     # https://stackoverflow.com/questions/44343431/flask-sqlalchemy-enum-field-default-value
+    # Enums in SQLAlchemy carry the enum when queried, bringing some clunk in the process.
+    # Subject to change.
     gender = db.Column(db.Enum(Gender), nullable=False, server_default='Other')
 
     # https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database
