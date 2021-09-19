@@ -16,6 +16,6 @@
     <p>
     {{ student.lastname }}, {{ student.firstname }}
     </p>
-    <p>{{ student.course }} - {{ student.year }}</p>
+    <p>{{ course.name or 'Undefined' }} - {{ student.year }}</p>
     <p>{{ student.gender.name }}</p>
 {% endblock %}
