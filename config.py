@@ -14,3 +14,5 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = getenv('DATABASE_URL') or \
         'sqlite:///' + path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    ITEMS_PER_PAGE = 50

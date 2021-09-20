@@ -7,8 +7,9 @@ from app.models import Student, Course
 @app.route('/')
 @app.route('/index/')
 @app.route('/students/')
-def students(field=None, text=None):
-    students = Student.query.all()
+def students():
+    page = request.args.get('page', 1, type=int)
+    students = Student.query.paginate(page, app.config['ITEMS_PER_PAGE'], False).items
     return render_template('students.html', title='Students', students=students)
 
 @app.route('/students/add/', methods=['GET', 'POST'])
