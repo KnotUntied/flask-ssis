@@ -9,8 +9,15 @@ from app.models import Student, Course
 @app.route('/students/')
 def students():
     page = request.args.get('page', 1, type=int)
-    students = Student.query.paginate(page, app.config['ITEMS_PER_PAGE'], False).items
-    return render_template('students.html', title='Students', students=students)
+    students = Student.query.paginate(page, app.config['ITEMS_PER_PAGE'], False)
+    next_url = url_for('students', page=students.next_num) if students.has_next else None
+    prev_url = url_for('students', page=students.prev_num) if students.has_prev else None
+    return render_template(
+        'students.html',
+        title='Students',
+        students=students.items,
+        next_url=next_url,
+        prev_url=prev_url)
 
 @app.route('/students/add/', methods=['GET', 'POST'])
 def add_student():
