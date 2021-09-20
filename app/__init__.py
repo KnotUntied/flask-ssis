@@ -5,14 +5,33 @@ from flask_migrate import Migrate
 
 from config import Config
 
-app = Flask(__name__)
-app.config.from_object(Config)
+db = SQLAlchemy()
+migrate = Migrate()
+bootstrap = Bootstrap()
 
-bootstrap = Bootstrap(app)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
-from app.errors import bp as errors_bp
-app.register_blueprint(errors_bp)
+    db.init_app(app)
+    migrate.init_app(app, db)
+    bootstrap.init_app(app)
 
-from app import routes, models
+    from app.main import bp as main_bp
+    app.register_blueprint(main_bp)
+
+    from app.students import bp as students_bp
+    app.register_blueprint(students_bp, url_prefix='/students')
+
+    from app.courses import bp as courses_bp
+    app.register_blueprint(courses_bp, url_prefix='/courses')
+
+    from app.colleges import bp as colleges_bp
+    app.register_blueprint(colleges_bp, url_prefix='/colleges')
+
+    from app.errors import bp as errors_bp
+    app.register_blueprint(errors_bp)
+
+    return app
+
+from app import models

@@ -1,26 +1,26 @@
-from flask import render_template, flash, redirect, request, url_for
+from flask import render_template, flash, redirect, request, url_for, current_app
 
-from app import app, db
-from app.forms import AddStudentForm, EditStudentForm
+from app import db
+from app.students import bp
+from app.students.forms import AddStudentForm, EditStudentForm
 from app.models import Student, Course
 
-@app.route('/')
-@app.route('/index/')
-@app.route('/students/')
-def students():
+@bp.route('/index/')
+@bp.route('/')
+def index():
     page = request.args.get('page', 1, type=int)
-    students = Student.query.paginate(page, app.config['ITEMS_PER_PAGE'], False)
-    next_url = url_for('students', page=students.next_num) if students.has_next else None
-    prev_url = url_for('students', page=students.prev_num) if students.has_prev else None
+    students = Student.query.paginate(page, current_app.config['ITEMS_PER_PAGE'], False)
+    next_url = url_for('students.index', page=students.next_num) if students.has_next else None
+    prev_url = url_for('students.index', page=students.prev_num) if students.has_prev else None
     return render_template(
-        'students.html',
+        'students/index.html',
         title='Students',
         students=students.items,
         next_url=next_url,
         prev_url=prev_url)
 
-@app.route('/students/add/', methods=['GET', 'POST'])
-def add_student():
+@bp.route('/add/', methods=['GET', 'POST'])
+def add():
     # TODO: Instruct user to create course if no courses created.
     form = AddStudentForm()
 
@@ -38,18 +38,18 @@ def add_student():
         db.session.add(student)
         db.session.commit()
         flash('{} {} {} has been added.'.format(form.id.data, form.firstname.data, form.lastname.data))
-        return redirect(url_for('students'))
-    return render_template('student_form.html', title='Add Student', form=form)
+        return redirect(url_for('students.index'))
+    return render_template('students/form.html', title='Add Student', form=form)
 
 # Unnecessary as of now, but may be expanded in the future.
-@app.route('/students/<id>')
-def view_student(id):
+@bp.route('/profile/<id>')
+def profile(id):
     student = Student.query.filter_by(id=id).first_or_404()
     course = Course.query.get(student.course)
-    return render_template('student_view.html', student=student, course=course)
+    return render_template('students/profile.html', student=student, course=course)
 
-@app.route('/students/<id>/edit', methods=['GET', 'POST'])
-def edit_student(id):
+@bp.route('/edit/<id>', methods=['GET', 'POST'])
+def edit(id):
     student = Student.query.get(id)
     form = EditStudentForm()
 
@@ -65,9 +65,8 @@ def edit_student(id):
         student.gender    = form.gender.data
         db.session.commit()
         flash('Edit successful.')
-        return redirect(url_for('view_student', id=student.id))
+        return redirect(url_for('students.view', id=student.id))
     elif request.method == 'GET':
-
         form.id.data        = student.id
         form.firstname.data = student.firstname
         form.lastname.data  = student.lastname
@@ -80,11 +79,3 @@ def edit_student(id):
         form.year.data      = student.year
         form.gender.data    = student.gender
     return render_template('student_form.html', title='Edit Student', form=form)
-
-@app.route('/courses/')
-def courses():
-    return render_template('courses.html', title='Courses')
-
-@app.route('/colleges/')
-def colleges():
-    return render_template('colleges.html', title='Colleges')
