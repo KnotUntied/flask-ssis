@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block app_content %}
     <h1>Students</h1>
     <div>
         <a href="{{ url_for('add_student') }}">Add Student</a>
     </div>
-    <hr>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul>
@@ -15,7 +14,7 @@
     </ul>
     {% endif %}
     {% endwith %}
-    <table>
+    <table class="table table-hover">
       <tr>
         <th>ID Number</th>
         <th>Last Name</th>
@@ -23,6 +22,8 @@
         <th>Course</th>
         <th>Year</th>
         <th>Gender</th>
+        <th></th>
+        <th></th>
       </tr>
       {% for student in students %}
       <tr>
@@ -37,10 +38,18 @@
       </tr>
       {% endfor %}
     </table>
-    {% if prev_url %}
-    <a href="{{ prev_url }}">Prev</a>
-    {% endif %}
-    {% if next_url %}
-    <a href="{{ next_url }}">Next</a>
-    {% endif %}
+    <nav aria-label="...">
+        <ul class="pager">
+            <li class="previous{% if not prev_url %} disabled{% endif %}">
+                <a href="{{ prev_url or '#' }}">
+                    <span aria-hidden="true">&larr;</span> Previous page
+                </a>
+            </li>
+            <li class="next{% if not next_url %} disabled{% endif %}">
+                <a href="{{ next_url or '#' }}">
+                    Next page <span aria-hidden="true">&rarr;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 {% endblock %}
