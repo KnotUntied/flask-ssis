@@ -37,7 +37,7 @@ def add():
             gender=form.gender.data)
         db.session.add(student)
         db.session.commit()
-        flash('{} {} {} has been added.'.format(form.id.data, form.firstname.data, form.lastname.data))
+        flash('{} {} {} has been added.'.format(form.id.data, form.firstname.data, form.lastname.data), 'success')
         return redirect(url_for('students.index'))
     return render_template('students/form.html', title='Add Student', form=form)
 

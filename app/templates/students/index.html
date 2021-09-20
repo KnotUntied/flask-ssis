@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block app_content %}
-    <h1>Students</h1>
+    <div class="page-header">
+        <h1>Students</h1>
+    </div>
     <div>
-        <a href="{{ url_for('students.add') }}">Add Student</a>
+        <a class="btn btn-default" href="{{ url_for('students.add') }}">Add Student</a>
     </div>
     <table class="table table-hover">
       <tr>
@@ -14,29 +16,32 @@
         <th>Year</th>
         <th>Gender</th>
         <th></th>
-        <th></th>
       </tr>
       {% for student in students %}
       <tr>
-        <td>{{ student.id }}</td>
+        <td><a href="{{ url_for('students.profile', id=student.id) }}">{{ student.id }}</a></td>
         <td>{{ student.lastname }}</td>
         <td>{{ student.firstname }}</td>
         <td>{{ student.course }}</td>
         <td>{{ student.year }}</td>
         <td>{{ student.gender.name }}</td>
-        <td><a href="{{ url_for('students.profile', id=student.id) }}">View</a></td>
-        <td><a href="{{ url_for('students.edit', id=student.id) }}">Edit</a></td>
+        <td>
+            <div class="btn-group" role="group" aria-label="...">
+                <a class="btn btn-default" href="{{ url_for('students.edit', id=student.id) }}">Edit</a>
+                <a class="btn btn-danger" href="{{ url_for('students.edit', id=student.id) }}">Delete</a>
+            </div>
+        </td>
       </tr>
       {% endfor %}
     </table>
     <nav aria-label="...">
         <ul class="pager">
-            <li class="previous{% if not prev_url %} disabled{% endif %}">
+            <li class="{% if not prev_url %}disabled{% endif %}">
                 <a href="{{ prev_url or '#' }}">
                     <span aria-hidden="true">&larr;</span> Previous page
                 </a>
             </li>
-            <li class="next{% if not next_url %} disabled{% endif %}">
+            <li class="{% if not next_url %}disabled{% endif %}">
                 <a href="{{ next_url or '#' }}">
                     Next page <span aria-hidden="true">&rarr;</span>
                 </a>
