@@ -8,8 +8,14 @@
     {% endif %}
 {% endblock %}
 
+{% block styles %}
+{{super()}}
+<link rel="stylesheet"
+      href="{{url_for('static', filename='style.css')}}">
+{% endblock %}
+
 {% block navbar %}
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default navbar-static-top navbar-inverse">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -25,6 +31,16 @@
                     <li><a href="{{ url_for('students.index') }}">Students</a></li>
                     <li><a href="{{ url_for('courses.index') }}">Courses</a></li>
                     <li><a href="{{ url_for('colleges.index') }}">Colleges</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url_for('students.add') }}">Add student</a></li>
+                            <li><a href="{{ url_for('courses.add') }}">Add course</a></li>
+                            <li><a href="{{ url_for('colleges.add') }}">Add college</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>

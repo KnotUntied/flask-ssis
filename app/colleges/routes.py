@@ -8,3 +8,7 @@ from app.models import College
 @bp.route('/')
 def index():
     return render_template('colleges/index.html', title='Colleges')
+
+@bp.route('/add/', methods=['GET', 'POST'])
+def add():
+    return render_template('colleges/index.html', title='Courses')
