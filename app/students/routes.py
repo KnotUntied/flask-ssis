@@ -78,4 +78,4 @@ def edit(id):
         print(form.course.data)
         form.year.data      = student.year
         form.gender.data    = student.gender
-    return render_template('student_form.html', title='Edit Student', form=form)
+    return render_template('students/form.html', title='Edit Student', form=form)
