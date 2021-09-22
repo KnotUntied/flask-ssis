@@ -24,6 +24,15 @@ def index():
     lastname = request.args.get('lastname')
     if lastname:
         students = students.filter(Student.lastname.contains(lastname))
+    course = request.args.getlist('course')
+    if course:
+        students = students.filter(Student.course.in_(course))
+    year = request.args.getlist('year')
+    if year:
+        students = students.filter(Student.year.in_(year))
+    gender = request.args.getlist('gender')
+    if gender:
+        students = students.filter(Student.gender.in_(gender))
 
     paginated = students.paginate(page, current_app.config['ITEMS_PER_PAGE'], False)
     count = students.count()
