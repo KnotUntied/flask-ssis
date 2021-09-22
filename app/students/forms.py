@@ -6,7 +6,8 @@ from app.models import Student
 from app.main.forms import MultiCheckboxField
 
 
-years = [1, 2, 3, 4]
+# Has to be strings as a workaround
+years = ['1', '2', '3', '4']
 genders = ['Other', 'Male', 'Female']
 
 def validate_name(form, field):
@@ -44,11 +45,11 @@ class SearchStudentForm(FlaskForm):
     id = StringField(label='ID Number (YYYY-NNNN)')
     firstname = StringField(label='First Name', validators=[Length(max=50), validate_name])
     lastname = StringField(label='Last Name', validators=[Length(max=50), validate_name])
-    course = SelectMultipleField(label='Course (can select multiple)')
+    course = SelectMultipleField(label='Course (hold Ctrl or Shift to select multiple)')
     year = MultiCheckboxField(
         label='Year Level',
         # 2-tuples are required for SelectMultipleField, for some reason
-        choices=[(y, str(y)) for y in years],
+        choices=[(y, y) for y in years],
         option_widget=CheckboxInput())
     gender = MultiCheckboxField(
         label='Gender',
