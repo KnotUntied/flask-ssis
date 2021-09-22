@@ -10,12 +10,29 @@ from app.models import Student, Course
 @bp.route('/')
 def index():
     page = request.args.get('page', 1, type=int)
-    students = Student.query.paginate(page, current_app.config['ITEMS_PER_PAGE'], False)
-    pagination = Pagination(page=page, per_page=current_app.config['ITEMS_PER_PAGE'], total=Student.query.count(), bs_version=3)
+    sort = request.args.get('sort', 'id')
+    order = request.args.get('order', 'asc')
+
+    students = Student.query
+
+    id = request.args.get('id')
+    if id:
+        students = students.filter(Student.id.contains(id))
+    firstname = request.args.get('firstname')
+    if firstname:
+        students = students.filter(Student.firstname.contains(firstname))
+    lastname = request.args.get('lastname')
+    if lastname:
+        students = students.filter(Student.lastname.contains(lastname))
+
+    paginated = students.paginate(page, current_app.config['ITEMS_PER_PAGE'], False)
+    count = students.count()
+
+    pagination = Pagination(page=page, per_page=current_app.config['ITEMS_PER_PAGE'], total=count, bs_version=3)
     return render_template(
         'students/index.html',
         title='Students',
-        students=students.items,
+        students=paginated.items,
         pagination=pagination)
 
 @bp.route('/add/', methods=['GET', 'POST'])
@@ -91,5 +108,8 @@ def search():
             'students.index',
             id=form.id.data or None,
             firstname=form.firstname.data or None,
-            lastname=form.lastname.data or None))
+            lastname=form.lastname.data or None,
+            course=form.course.data or None,
+            year=form.year.data or None,
+            gender=form.gender.data or None))
     return render_template('students/search.html', title='Search Student', form=form)
