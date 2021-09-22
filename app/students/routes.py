@@ -58,13 +58,13 @@ def add():
     return render_template('students/form.html', title='Add Student', form=form)
 
 # Unnecessary as of now, but may be expanded in the future.
-@bp.route('/profile/<id>')
+@bp.route('/profile/<id>/')
 def profile(id):
     student = Student.query.filter_by(id=id).first_or_404()
     course = Course.query.get(student.course)
     return render_template('students/profile.html', student=student, course=course)
 
-@bp.route('/edit/<id>', methods=['GET', 'POST'])
+@bp.route('/edit/<id>/', methods=['GET', 'POST'])
 def edit(id):
     student = Student.query.get(id)
     form = EditStudentForm()
@@ -80,8 +80,8 @@ def edit(id):
         student.year      = form.year.data
         student.gender    = form.gender.data
         db.session.commit()
-        flash('Edit successful.')
-        return redirect(url_for('students.view', id=student.id))
+        flash('Edit successful.', 'success')
+        return redirect(url_for('students.profile', id=student.id))
     elif request.method == 'GET':
         form.id.data        = student.id
         form.firstname.data = student.firstname
@@ -91,7 +91,6 @@ def edit(id):
         # TODO: Instruct user to create course if no courses created.
         elif form.course.choices:
             form.course.data = form.course.choices[0][0]
-        print(form.course.data)
         form.year.data      = student.year
         form.gender.data    = student.gender
     return render_template('students/form.html', title='Edit Student', form=form)
