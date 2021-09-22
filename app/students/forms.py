@@ -42,7 +42,7 @@ class EditStudentForm(StudentForm):
             raise ValidationError('ID number has already been used.')
 
 class SearchStudentForm(FlaskForm):
-    id = StringField(label='ID Number (YYYY-NNNN)')
+    id = StringField(label='ID Number (YYYY-NNNN)', validators=[Regexp(regex=r'[\d\-]*')])
     firstname = StringField(label='First Name', validators=[Length(max=50), validate_name])
     lastname = StringField(label='Last Name', validators=[Length(max=50), validate_name])
     course = SelectMultipleField(label='Course (hold Ctrl or Shift to select multiple)')
