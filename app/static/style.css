@@ -1,0 +1,9 @@
+/* Bootstrap 3's aggressive table specificity */
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+table tr td:last-child {
+    white-space: nowrap;
+    width: 1px;
+}

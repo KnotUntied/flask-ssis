@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <h1>{{ title }}</h1>
+    <div class="row">
+        <div class="col-md-6 form-group">
+            <form class="form" method="post" role="form">
+                {{ form.hidden_tag() }}
+                {{ wtf.form_errors(form, hiddens="only") }}
+
+                {{ wtf.form_field(form.id) }}
+                {{ wtf.form_field(form.firstname) }}
+                {{ wtf.form_field(form.lastname) }}
+                {{ wtf.form_field(form.course) }}
+                <div class="form-group">
+                    {{ form.year.label(class_="control-label") }}
+                    <ul class="list-inline" id="year">
+                        {% for subfield in form.year %}
+                            <li>
+                                <label class="checkbox-inline">
+                                    {{ subfield }}{{ subfield.label }}
+                                </label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="form-group">
+                    {{ form.gender.label(class_="control-label") }}
+                    <ul class="list-inline" id="gender">
+                        {% for subfield in form.gender %}
+                            <li>
+                                <label class="checkbox-inline">
+                                    {{ subfield }}{{ subfield.label }}
+                                </label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+{% endblock %}
