@@ -13,7 +13,8 @@ def index():
     sort = request.args.get('sort', 'id')
     order = request.args.get('order', 'asc')
 
-    students = Student.query
+    students = Student.query.order_by(
+        db.asc(sort) if order == 'asc' else db.desc(sort))
 
     id = request.args.get('id')
     if id:
