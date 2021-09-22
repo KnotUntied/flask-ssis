@@ -50,18 +50,5 @@
           {% endfor %}
         </table>
     </div>
-    <nav aria-label="...">
-        <ul class="pager">
-            <li class="{% if not prev_url %}disabled{% endif %}">
-                <a href="{{ prev_url or '#' }}">
-                    <span aria-hidden="true">&larr;</span> Previous page
-                </a>
-            </li>
-            <li class="{% if not next_url %}disabled{% endif %}">
-                <a href="{{ next_url or '#' }}">
-                    Next page <span aria-hidden="true">&rarr;</span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <nav class="text-center center-block" aria-label="Page navigation">{{ pagination.links }}</nav>
 {% endblock %}

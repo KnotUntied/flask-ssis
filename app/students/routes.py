@@ -1,8 +1,9 @@
 from flask import render_template, flash, redirect, request, url_for, current_app
+from flask_paginate import Pagination, get_page_parameter
 
 from app import db
 from app.students import bp
-from app.students.forms import AddStudentForm, EditStudentForm
+from app.students.forms import AddStudentForm, EditStudentForm, SearchStudentForm
 from app.models import Student, Course
 
 @bp.route('/index/')
@@ -10,14 +11,12 @@ from app.models import Student, Course
 def index():
     page = request.args.get('page', 1, type=int)
     students = Student.query.paginate(page, current_app.config['ITEMS_PER_PAGE'], False)
-    next_url = url_for('students.index', page=students.next_num) if students.has_next else None
-    prev_url = url_for('students.index', page=students.prev_num) if students.has_prev else None
+    pagination = Pagination(page=page, per_page=current_app.config['ITEMS_PER_PAGE'], total=Student.query.count(), bs_version=3)
     return render_template(
         'students/index.html',
         title='Students',
         students=students.items,
-        next_url=next_url,
-        prev_url=prev_url)
+        pagination=pagination)
 
 @bp.route('/add/', methods=['GET', 'POST'])
 def add():
@@ -79,3 +78,18 @@ def edit(id):
         form.year.data      = student.year
         form.gender.data    = student.gender
     return render_template('students/form.html', title='Edit Student', form=form)
+
+@bp.route('/search/', methods=['GET', 'POST'])
+def search():
+    form = SearchStudentForm()
+
+    courses = Course.query.all()
+    form.course.choices = list(course.to_choice() for course in courses)
+
+    if form.validate_on_submit():
+        return redirect(url_for(
+            'students.index',
+            id=form.id.data or None,
+            firstname=form.firstname.data or None,
+            lastname=form.lastname.data or None))
+    return render_template('students/search.html', title='Search Student', form=form)
