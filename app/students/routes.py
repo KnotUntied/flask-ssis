@@ -104,6 +104,16 @@ def edit(id):
         form.gender.data    = student.gender
     return render_template('students/form.html', title='Edit Student', form=form)
 
+# Rudimentary, maybe unsafe
+# TODO: Retain index args after delete
+@bp.route('/delete/<id>/')
+def delete(id):
+    student = Student.query.filter_by(id=id).first_or_404()
+    db.session.delete(student)
+    db.session.commit()
+    flash('{} {} {} has been deleted.'.format(student.id, student.firstname, student.lastname), 'danger')
+    return redirect(url_for('students.index'))
+
 @bp.route('/search/', methods=['GET', 'POST'])
 def search():
     form = SearchStudentForm()

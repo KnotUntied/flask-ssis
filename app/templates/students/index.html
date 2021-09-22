@@ -31,7 +31,7 @@
             <td>{{ student.gender.name }}</td>
             <td>
                 <a class="btn btn-default" href="{{ url_for('students.edit', id=student.id) }}">Edit</a>
-                <a class="btn btn-danger" href="{{ url_for('students.edit', id=student.id) }}">Delete</a>
+                <a class="btn btn-danger" href="{{ url_for('students.delete', id=student.id) }}" onclick="return confirm('Are you sure you want to delete {{ student.id }}?')">Delete</a>
             </td>
           </tr>
           {% endfor %}
