@@ -1,0 +1,7 @@
+{% macro sort_icon(sort, order, sort_by) -%}
+    <a class="pull-right" href="{{ modify_query(sort=sort_by, order='desc' if sort == sort_by and order == 'asc' else 'asc') }}">
+        <span class="glyphicon
+            glyphicon-{% if sort == sort_by %}arrow-{{ 'up' if order == 'asc' else 'down' }}{% else %}sort{% endif %}"
+            aria-hidden="true"></span>
+    </a>
+{%- endmacro %}

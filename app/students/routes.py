@@ -47,7 +47,9 @@ def index():
         title='Students',
         students=paginated.items,
         pagination=pagination,
-        form=form)
+        form=form,
+        sort=sort,
+        order=order)
 
 @bp.route('/add/', methods=['GET', 'POST'])
 def add():

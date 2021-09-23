@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import 'template_utils.html' as utils %}
 
 {% block app_content %}
     <div class="page-header">
@@ -11,14 +12,14 @@
     <div>
     </div>
     <div class="table-responsive">
-        <table class="table table-hover table-condensed">
+        <table class="table table-hover table-bordered table-condensed">
           <tr>
-            <th>ID Number</th>
-            <th>Last Name</th>
-            <th>First Name</th>
-            <th>Course</th>
-            <th>Year</th>
-            <th>Gender</th>
+            <th>ID Number {{ utils.sort_icon(sort, order, 'id') }}</th>
+            <th>Last Name {{ utils.sort_icon(sort, order, 'lastname') }}</th>
+            <th>First Name {{ utils.sort_icon(sort, order, 'firstname') }}</th>
+            <th>Course {{ utils.sort_icon(sort, order, 'course') }}</th>
+            <th>Year {{ utils.sort_icon(sort, order, 'year') }}</th>
+            <th>Gender {{ utils.sort_icon(sort, order, 'gender') }}</th>
             <th></th>
           </tr>
           {% for student in students %}
