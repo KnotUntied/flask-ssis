@@ -4,6 +4,7 @@ from flask_paginate import Pagination, get_page_parameter
 from app import db
 from app.students import bp
 from app.students.forms import AddStudentForm, EditStudentForm, SearchStudentForm
+from app.main.forms import EmptyForm
 from app.models import Student, Course
 
 @bp.route('/index/')
@@ -39,11 +40,14 @@ def index():
     count = students.count()
 
     pagination = Pagination(page=page, per_page=current_app.config['ITEMS_PER_PAGE'], total=count, bs_version=3)
+
+    form = EmptyForm()
     return render_template(
         'students/index.html',
         title='Students',
         students=paginated.items,
-        pagination=pagination)
+        pagination=pagination,
+        form=form)
 
 @bp.route('/add/', methods=['GET', 'POST'])
 def add():
@@ -107,7 +111,7 @@ def edit(id):
 
 # Rudimentary, maybe unsafe
 # TODO: Retain index args after delete
-@bp.route('/delete/<id>/')
+@bp.route('/delete/<id>/', methods=['POST'])
 def delete(id):
     student = Student.query.filter_by(id=id).first_or_404()
     db.session.delete(student)
