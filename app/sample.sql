@@ -59,8 +59,7 @@ INSERT INTO student (id, firstname, lastname, course, year, gender) VALUES
     ('2026-0047', 'Hotel', 'Trivago', 'BSCE', 2, 'Other'),
     ('2026-0048', 'Hotel', 'Trivago', 'BSCE', 2, 'Other'),
     ('2026-0049', 'Hotel', 'Trivago', 'BSCE', 2, 'Other'),
-    ('2026-0050', 'Hotel', 'Trivago', 'BSCE', 2, 'Other');
-
+    ('2026-0050', 'Hotel', 'Trivago', 'BSCE', 2, 'Other'),
     ('2027-0001', 'Boi', 'Default', 'BSIT', 3, 'Male'),
     ('2027-0002', 'Boi', 'Default', 'BSIT', 3, 'Male'),
     ('2027-0003', 'Boi', 'Default', 'BSIT', 3, 'Male'),
