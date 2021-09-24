@@ -18,11 +18,7 @@ class Base(object):
 
     @classmethod
     def get_one(cls, val):
-        cursor = db.connection.cursor()
-        cursor.execute(f'SELECT (id, firstname, lastname, course, year, gender) \
-            FROM {cls._ref} WHERE {cls._primary} = %s LIMIT 1', (val,))
-        result = cursor.fetchone()
-        return result
+        pass
 
     @classmethod
     def delete(cls, val):
@@ -33,6 +29,9 @@ class Base(object):
             return True
         except:
             return False
+
+    def add(self):
+        pass
 
 class Student(Base):
     def __init__(self, id, firstname, lastname, course, year, gender):
@@ -56,6 +55,14 @@ class Student(Base):
             VALUES (%s, %s, %s, %s, %s, %s);',
             (self.id, self.firstname, self.lastname, self.course, self.year, self.gender))
         db.connection.commit()
+
+    @classmethod
+    def get_one(cls, val):
+        cursor = db.connection.cursor()
+        cursor.execute(f'SELECT id, firstname, lastname, course, year, gender \
+            FROM {cls._ref} WHERE {cls._primary} = %s LIMIT 1', (val,))
+        result = cursor.fetchone()
+        return Student(*result)
 
     @classmethod
     def get_paginated(cls,

@@ -134,7 +134,7 @@ def delete(id):
     student = Student.get_one(id)
     Student.delete(id)
     # student = Student.query.filter_by(id=id).first_or_404()
-    flash('{} {} {} has been deleted.'.format(student[0], student[1], student[2]), 'danger')
+    flash('{} {} {} has been deleted.'.format(student.id, student.firstname, student.lastname), 'danger')
     return redirect(url_for('students.index'))
 
 @bp.route('/search/', methods=['GET', 'POST'])
