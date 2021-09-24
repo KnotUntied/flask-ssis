@@ -3,7 +3,7 @@ from flask_paginate import Pagination, get_page_parameter
 
 from app import db
 from app.colleges import bp
-from app.colleges.forms import CollegeForm, AddCollegeForm, EditCollegeForm
+from app.colleges.forms import AddCollegeForm, EditCollegeForm, SearchCollegeForm
 from app.main.forms import EmptyForm
 from app.models import College
 
@@ -76,7 +76,7 @@ def delete(code):
 
 @bp.route('/search/', methods=['GET', 'POST'])
 def search():
-    form = CollegeForm()
+    form = SearchCollegeForm()
 
     if form.validate_on_submit():
         return redirect(url_for(

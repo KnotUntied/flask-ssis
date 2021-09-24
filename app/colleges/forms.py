@@ -20,3 +20,8 @@ class EditCollegeForm(CollegeForm):
         existing = College.get_one(field.data)
         if existing and existing.code != field.object_data:
             raise ValidationError('College code has already been used.')
+
+class SearchCollegeForm(FlaskForm):
+    code = StringField(label='College Code', validators=[Length(min=1, max=5)])
+    name = StringField(label='College Name', validators=[Length(min=1, max=50)])
+    submit = SubmitField(label='Submit')
