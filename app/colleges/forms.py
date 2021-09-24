@@ -10,13 +10,13 @@ class CollegeForm(FlaskForm):
     submit = SubmitField(label='Submit')
 
 class AddCollegeForm(CollegeForm):
-    def validate_code(self, code):
-        code = College.query.filter_by(code=code.data).first()
-        if code is not None:
+    def validate_code(form, field):
+        existing = College.get_one(field.data)
+        if existing:
             raise ValidationError('College code has already been used.')
 
 class EditCollegeForm(CollegeForm):
-    def validate_code(self, code):
-        new_code = College.query.filter_by(code=code.data).first()
-        if new_code is not None and new_code == code:
+    def validate_code(form, field):
+        existing = College.get_one(field.data)
+        if existing and existing.code != field.object_data:
             raise ValidationError('College code has already been used.')

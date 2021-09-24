@@ -1,4 +1,38 @@
 {% extends "base.html" %}
+{% import 'template_utils.html' as utils %}
 
 {% block app_content %}
+    <div class="page-header">
+        <h1>Colleges</h1>
+    </div>
+    <div class="form-group">
+        <a class="btn btn-primary" href="{{ url_for('colleges.add') }}">Add College</a>
+        <a class="btn btn-default" href="{{ url_for('colleges.search') }}">Search</a>
+    </div>
+    <div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-condensed">
+          <tr>
+            <th>College Code {{ utils.sort_icon(sort, order, 'code') }}</th>
+            <th>College Name {{ utils.sort_icon(sort, order, 'name') }}</th>
+            <th></th>
+          </tr>
+          {% for college in colleges %}
+          <tr>
+            <td><a href="{{ url_for('colleges.profile', code=college.code) }}">{{ college.code }}</a></td>
+            <td>{{ college.name }}</td>
+            <td>
+                <form class="form-inline" method="post" action="{{ url_for('colleges.delete', code=college.code) }}">
+                    {{ form.csrf_token() }}
+                    <a class="btn btn-default" href="{{ url_for('colleges.edit', code=college.code) }}">Edit</a>
+                    <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to delete {{ college.code }}?')">Delete
+                    </button>
+                </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+    </div>
+    <nav class="text-center center-block" aria-label="Page navigation">{{ pagination.links }}</nav>
 {% endblock %}
