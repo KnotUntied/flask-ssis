@@ -38,7 +38,7 @@ class EditStudentForm(StudentForm):
     def validate_id(form, field):
         existing = Student.get_one(field.data)
         # existing = Student.query.filter_by(id=field.data).first()
-        if existing and existing.id == field.data:
+        if existing and existing.id != field.object_data:
             raise ValidationError('ID number has already been used.')
 
 class SearchStudentForm(FlaskForm):

@@ -12,6 +12,9 @@ class Base(object):
     def add(self):
         pass
 
+    def edit(self):
+        pass
+
     @classmethod
     def count_all(cls):
         cursor = db.connection.cursor()
@@ -58,7 +61,7 @@ class Base(object):
     #     return '<Student {}>'.format(self._primary)
 
 class Student(Base):
-    def __init__(self, id, firstname, lastname, course, year, gender):
+    def __init__(self, id=None, firstname=None, lastname=None, course=None, year=None, gender=None):
         self.id = id
         self.firstname = firstname
         self.lastname = lastname
@@ -78,6 +81,21 @@ class Student(Base):
             'INSERT INTO student (id, firstname, lastname, course, year, gender) \
             VALUES (%s, %s, %s, %s, %s, %s);',
             (self.id, self.firstname, self.lastname, self.course, self.year, self.gender))
+        db.connection.commit()
+
+    def edit(self, prev_id):
+        cursor = db.connection.cursor()
+        cursor.execute(
+            'UPDATE student \
+            SET \
+                id = %s, \
+                firstname = %s, \
+                lastname = %s, \
+                course = %s, \
+                year = %s, \
+                gender = %s \
+            WHERE id = %s;',
+            (self.id, self.firstname, self.lastname, self.course, self.year, self.gender, prev_id))
         db.connection.commit()
 
     @classmethod
