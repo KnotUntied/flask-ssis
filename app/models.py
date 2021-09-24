@@ -61,12 +61,69 @@ class Student(Base):
     def get_paginated(cls,
         page=1, per_page=50, sort='id', order='asc',
         id=None, firstname=None, lastname=None, course=None, year=None, gender=None):
+        params = []
         query = f'SELECT * FROM {cls._ref} '
+        if id or firstname or lastname or course or year or gender:
+            query += 'WHERE '
+            filters = []
+            # Make searches for id, firstname, and lastname partial
+            if id:
+                filters.append('id LIKE %s ')
+                params.append(f'%{id}%')
+            if firstname:
+                filters.append('firstname LIKE %s ')
+                params.append(f'%{firstname}%')
+            if lastname:
+                filters.append('lastname LIKE %s ')
+                params.append(f'%{lastname}%')
+            if course:
+                filters.append('course IN (%s) ')
+                params.append(f'{",".join(course)}')
+            if year:
+                filters.append('year IN (%s) ')
+                params.append(f'{",".join(year)}')
+            if gender:
+                filters.append('gender IN (%s) ')
+                params.append(f'{",".join(gender)}')
+            query += 'AND '.join(filters)
         query += f'ORDER BY {sort} {order} LIMIT {(page - 1) * per_page}, {per_page};'
         cursor = db.connection.cursor()
-        cursor.execute(query)
+        cursor.execute(query, tuple(params) or None)
         result = cursor.fetchall()
         return starmap(Student, result)
+
+    @classmethod
+    def count_query(cls,
+        id=None, firstname=None, lastname=None, course=None, year=None, gender=None):
+        params = []
+        query = f'SELECT COUNT(*) FROM {cls._ref} '
+        if id or firstname or lastname or course or year or gender:
+            query += 'WHERE '
+            filters = []
+            # Make searches for id, firstname, and lastname partial
+            if id:
+                filters.append('id LIKE %s ')
+                params.append(f'%{id}%')
+            if firstname:
+                filters.append('firstname LIKE %s ')
+                params.append(f'%{firstname}%')
+            if lastname:
+                filters.append('lastname LIKE %s ')
+                params.append(f'%{lastname}%')
+            if course:
+                filters.append('course IN (%s) ')
+                params.append(f'{",".join(course)}')
+            if year:
+                filters.append('year IN (%s) ')
+                params.append(f'{",".join(year)}')
+            if gender:
+                filters.append('gender IN (%s) ')
+                params.append(f'{",".join(gender)}')
+            query += 'AND '.join(filters)
+        cursor = db.connection.cursor()
+        cursor.execute(query, tuple(params) or None)
+        result = cursor.fetchone()
+        return result[0]
 
     # https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database
     # The __repr__ method tells Python how to print objects of this class

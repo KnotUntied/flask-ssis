@@ -36,14 +36,22 @@ def index():
     # if gender:
     #     students = students.filter(Student.gender.in_(gender))
 
+    id = request.args.get('id') or None
+    firstname = request.args.get('firstname') or None
+    lastname = request.args.get('lastname') or None
+    course = request.args.getlist('course') or None
+    year = request.args.getlist('year') or None
+    gender = request.args.getlist('gender') or None
+
     # paginated = students.paginate(page, current_app.config['ITEMS_PER_PAGE'], False)
     paginated = Student.get_paginated(
-        page, current_app.config['ITEMS_PER_PAGE'], sort, order)
+        page, current_app.config['ITEMS_PER_PAGE'], sort, order,
+        id, firstname, lastname, course, year, gender)
 
     pagination = Pagination(
         page=page,
         per_page=current_app.config['ITEMS_PER_PAGE'],
-        total=Student.count_all(),
+        total=Student.count_query(id, firstname, lastname, course, year, gender),
         bs_version=3)
 
     form = EmptyForm()
