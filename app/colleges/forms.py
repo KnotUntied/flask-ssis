@@ -22,6 +22,6 @@ class EditCollegeForm(CollegeForm):
             raise ValidationError('College code has already been used.')
 
 class SearchCollegeForm(FlaskForm):
-    code = StringField(label='College Code', validators=[Length(min=1, max=5)])
-    name = StringField(label='College Name', validators=[Length(min=1, max=50)])
+    code = StringField(label='College Code', validators=[Length(max=5)])
+    name = StringField(label='College Name', validators=[Length(max=50)])
     submit = SubmitField(label='Submit')
