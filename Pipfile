@@ -6,10 +6,10 @@ name = "pypi"
 [packages]
 flask = "*"
 flask-wtf = "*"
-flask-sqlalchemy = "*"
-flask-migrate = "*"
 flask-bootstrap = "*"
 flask-paginate = "*"
+python-dotenv = "*"
+flask-mysqldb = "*"
 
 [dev-packages]
 

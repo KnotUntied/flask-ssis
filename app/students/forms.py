@@ -6,10 +6,6 @@ from app.models import Student
 from app.main.forms import MultiCheckboxField
 
 
-# Has to be strings as a workaround
-years = ['1', '2', '3', '4']
-genders = ['Other', 'Male', 'Female']
-
 def validate_name(form, field):
     excluded_chars = '1234567890'
     for char in field.data:
@@ -25,19 +21,21 @@ class StudentForm(FlaskForm):
     year = IntegerField(label='Year Level', validators=[DataRequired(), NumberRange(min=1, max=4)])
     gender = SelectField(
         label='Gender',
-        choices=genders,
-        validators=[DataRequired(), AnyOf(values=genders)])
+        choices=Student.genders,
+        validators=[DataRequired(), AnyOf(values=Student.genders)])
     submit = SubmitField(label='Submit')
 
 class AddStudentForm(StudentForm):
     def validate_id(self, id):
-        id = Student.query.filter_by(id=id.data).first()
+        id = Student.get_one(id)
+        # id = Student.query.filter_by(id=id.data).first()
         if id is not None:
             raise ValidationError('ID number has already been used.')
 
 class EditStudentForm(StudentForm):
     def validate_id(self, id):
-        new_id = Student.query.filter_by(id=id.data).first()
+        new_id = Student.get_one(id)
+        # new_id = Student.query.filter_by(id=id.data).first()
         if new_id is not None and new_id == id:
             raise ValidationError('ID number has already been used.')
 
@@ -49,10 +47,10 @@ class SearchStudentForm(FlaskForm):
     year = MultiCheckboxField(
         label='Year Level',
         # 2-tuples are required for SelectMultipleField, for some reason
-        choices=[(y, y) for y in years],
+        choices=[(y, y) for y in Student.years],
         option_widget=CheckboxInput())
     gender = MultiCheckboxField(
         label='Gender',
-        choices=[(g, g) for g in genders],
+        choices=[(g, g) for g in Student.genders],
         option_widget=CheckboxInput())
     submit = SubmitField(label='Submit')

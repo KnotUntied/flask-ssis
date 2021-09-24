@@ -29,7 +29,7 @@
             <td>{{ student.firstname }}</td>
             <td>{{ student.course }}</td>
             <td>{{ student.year }}</td>
-            <td>{{ student.gender.name }}</td>
+            <td>{{ student.gender }}</td>
             <td>
                 <form class="form-inline" method="post" action="{{ url_for('students.delete', id=student.id) }}">
                     {{ form.csrf_token() }}
