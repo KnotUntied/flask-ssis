@@ -13,16 +13,16 @@ CREATE TABLE college (
 CREATE TABLE course (
   code VARCHAR(10) PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
-  college VARCHAR(5) NOT NULL,
-  FOREIGN KEY (college) REFERENCES college (code)
+  college VARCHAR(5),
+  FOREIGN KEY (college) REFERENCES college (code) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
 CREATE TABLE student (
   id CHAR(9) PRIMARY KEY,
   firstname VARCHAR(50) NOT NULL,
   lastname VARCHAR(50) NOT NULL,
-  course VARCHAR(10) NOT NULL,
+  course VARCHAR(10),
   year INT UNSIGNED NOT NULL,
   gender ENUM ('Other', 'Male', 'Female'),
-  FOREIGN KEY (course) REFERENCES course (code)
+  FOREIGN KEY (course) REFERENCES course (code) ON UPDATE CASCADE ON DELETE SET NULL
 );

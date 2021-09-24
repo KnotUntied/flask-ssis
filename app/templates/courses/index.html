@@ -1,4 +1,40 @@
 {% extends "base.html" %}
+{% import 'template_utils.html' as utils %}
 
 {% block app_content %}
+    <div class="page-header">
+        <h1>Courses</h1>
+    </div>
+    <div class="form-group">
+        <a class="btn btn-primary" href="{{ url_for('courses.add') }}">Add Course</a>
+        <a class="btn btn-default" href="{{ url_for('courses.search') }}">Search</a>
+    </div>
+    <div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered table-condensed">
+          <tr>
+            <th>Course Code {{ utils.sort_icon(sort, order, 'code') }}</th>
+            <th>Course Name {{ utils.sort_icon(sort, order, 'name') }}</th>
+            <th>College {{ utils.sort_icon(sort, order, 'college') }}</th>
+            <th></th>
+          </tr>
+          {% for course in courses %}
+          <tr>
+            <td><a href="{{ url_for('courses.profile', code=course.code) }}">{{ course.code }}</a></td>
+            <td>{{ course.name }}</td>
+            <td>{{ course.college }}</td>
+            <td>
+                <form class="form-inline" method="post" action="{{ url_for('courses.delete', code=course.code) }}">
+                    {{ form.csrf_token() }}
+                    <a class="btn btn-default" href="{{ url_for('courses.edit', code=course.code) }}">Edit</a>
+                    <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to delete {{ course.code }}?')">Delete
+                    </button>
+                </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+    </div>
+    <nav class="text-center center-block" aria-label="Page navigation">{{ pagination.links }}</nav>
 {% endblock %}

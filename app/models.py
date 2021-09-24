@@ -178,7 +178,7 @@ class Student(Base):
         return result[0]
 
 class Course(Base):
-    def __init__(self, code, name, college):
+    def __init__(self, code=None, name=None, college=None):
         self.code = code
         self.name = name
         self.college = college
@@ -201,7 +201,7 @@ class Course(Base):
                 code = %s, \
                 name = %s, \
                 college = %s \
-            WHERE id = %s;',
+            WHERE code = %s;',
             (self.code, self.name, self.college, prev_id))
         db.connection.commit()
 
@@ -218,7 +218,7 @@ class Course(Base):
 
     @classmethod
     def get_paginated(cls,
-        page=1, per_page=50, sort='id', order='asc',
+        page=1, per_page=50, sort='code', order='asc',
         code=None, name=None, college=None):
         params = []
         query = f'SELECT * FROM {cls._ref} '
@@ -249,7 +249,6 @@ class Course(Base):
         if code or name or college:
             query += 'WHERE '
             filters = []
-            # Make searches for id, firstname, and lastname partial
             if code:
                 filters.append('code LIKE %s ')
                 params.append(f'%{code}%')
@@ -266,7 +265,7 @@ class Course(Base):
         return result[0]
 
 class College(Base):
-    def __init__(self, code, name):
+    def __init__(self, code=None, name=None):
         self.code = code
         self.name = name
 
@@ -287,7 +286,7 @@ class College(Base):
             SET \
                 code = %s, \
                 name = %s \
-            WHERE id = %s;',
+            WHERE code = %s;',
             (self.code, self.name, prev_id))
         db.connection.commit()
 
@@ -304,7 +303,7 @@ class College(Base):
 
     @classmethod
     def get_paginated(cls,
-        page=1, per_page=50, sort='id', order='asc',
+        page=1, per_page=50, sort='code', order='asc',
         code=None, name=None):
         params = []
         query = f'SELECT * FROM {cls._ref} '
@@ -332,7 +331,6 @@ class College(Base):
         if code or name or college:
             query += 'WHERE '
             filters = []
-            # Make searches for id, firstname, and lastname partial
             if code:
                 filters.append('code LIKE %s ')
                 params.append(f'%{code}%')

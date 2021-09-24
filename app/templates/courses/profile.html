@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <h1>{{ course.code }}</h1>
+    <hr>
+    <p><a href="{{ url_for('courses.edit', code=course.code) }}">Edit</a></p>
+    <p>{{ course.name }}</p>
+    <p>{{ college.name or 'Undefined' }} ({{ course.college or 'Undefined' }})</p>
+{% endblock %}
