@@ -78,7 +78,7 @@ class Student(Base):
     def add(self):
         cursor = db.connection.cursor()
         cursor.execute(
-            'INSERT INTO student (id, firstname, lastname, course, year, gender) \
+            f'INSERT INTO {self._ref} (id, firstname, lastname, course, year, gender) \
             VALUES (%s, %s, %s, %s, %s, %s);',
             (self.id, self.firstname, self.lastname, self.course, self.year, self.gender))
         db.connection.commit()
@@ -86,7 +86,7 @@ class Student(Base):
     def edit(self, prev_id):
         cursor = db.connection.cursor()
         cursor.execute(
-            'UPDATE student \
+            f'UPDATE {self._ref} \
             SET \
                 id = %s, \
                 firstname = %s, \
@@ -105,7 +105,7 @@ class Student(Base):
             FROM {cls._ref} WHERE {cls._primary} = %s LIMIT 1', (val,))
         result = cursor.fetchone()
         if result:
-            return Student(*result)
+            return cls(*result)
         else:
             return False
 
@@ -142,7 +142,7 @@ class Student(Base):
         cursor = db.connection.cursor()
         cursor.execute(query, tuple(params) or None)
         result = cursor.fetchall()
-        return starmap(Student, result)
+        return starmap(cls, result)
 
     @classmethod
     def count_query(cls,
@@ -186,26 +186,164 @@ class Course(Base):
     _ref = 'course'
     _primary = 'code'
 
-    # code = db.Column(db.String(10), primary_key=True)
-    # name = db.Column(db.String(50), nullable=False)
-    # college = db.Column(db.String(5), db.ForeignKey('college.code', onupdate='CASCADE', ondelete='SET NULL'))
+    def add(self):
+        cursor = db.connection.cursor()
+        cursor.execute(
+            f'INSERT INTO {self._ref} (code, name, college) VALUES (%s, %s, %s);',
+            (self.code, self.name, self.college))
+        db.connection.commit()
 
-    # def __repr__(self):
-    #     return '<Course {}>'.format(self.code)
+    def edit(self, prev_id):
+        cursor = db.connection.cursor()
+        cursor.execute(
+            f'UPDATE {self._ref} \
+            SET \
+                code = %s, \
+                name = %s, \
+                college = %s \
+            WHERE id = %s;',
+            (self.code, self.name, self.college, prev_id))
+        db.connection.commit()
 
-    # def to_choice(self):
-    #     return (self.code, '{} ({})'.format(self.name, self.code))
+    @classmethod
+    def get_one(cls, val):
+        cursor = db.connection.cursor()
+        cursor.execute(f'SELECT code, name, college \
+            FROM {cls._ref} WHERE {cls._primary} = %s LIMIT 1', (val,))
+        result = cursor.fetchone()
+        if result:
+            return cls(*result)
+        else:
+            return False
+
+    @classmethod
+    def get_paginated(cls,
+        page=1, per_page=50, sort='id', order='asc',
+        code=None, name=None, college=None):
+        params = []
+        query = f'SELECT * FROM {cls._ref} '
+        if code or name or college:
+            query += 'WHERE '
+            filters = []
+            if code:
+                filters.append('code LIKE %s ')
+                params.append(f'%{code}%')
+            if name:
+                filters.append('name LIKE %s ')
+                params.append(f'%{name}%')
+            if college:
+                filters.append('college IN (%s) ')
+                params.append(f'{",".join(college)}')
+            query += 'AND '.join(filters)
+        query += f'ORDER BY {sort} {order} LIMIT {(page - 1) * per_page}, {per_page};'
+        cursor = db.connection.cursor()
+        cursor.execute(query, tuple(params) or None)
+        result = cursor.fetchall()
+        return starmap(cls, result)
+
+    @classmethod
+    def count_query(cls,
+        code=None, name=None, college=None):
+        params = []
+        query = f'SELECT COUNT(*) FROM {cls._ref} '
+        if code or name or college:
+            query += 'WHERE '
+            filters = []
+            # Make searches for id, firstname, and lastname partial
+            if code:
+                filters.append('code LIKE %s ')
+                params.append(f'%{code}%')
+            if name:
+                filters.append('name LIKE %s ')
+                params.append(f'%{name}%')
+            if college:
+                filters.append('college IN (%s) ')
+                params.append(f'{",".join(college)}')
+            query += 'AND '.join(filters)
+        cursor = db.connection.cursor()
+        cursor.execute(query, tuple(params) or None)
+        result = cursor.fetchone()
+        return result[0]
 
 class College(Base):
-    pass
-    # code = db.Column(db.String(5), primary_key=True)
-    # name = db.Column(db.String(50), nullable=False)
+    def __init__(self, code, name):
+        self.code = code
+        self.name = name
 
-    # def __repr__(self):
-    #     return '<College {}>'.format(self.code)
+    _ref = 'college'
+    _primary = 'code'
 
-    # def to_choice(self):
-    #     return (self.code, '{} ({})'.format(self.name, self.code))
+    def add(self):
+        cursor = db.connection.cursor()
+        cursor.execute(
+            f'INSERT INTO {self._ref} (code, name) VALUES (%s, %s);',
+            (self.code, self.name))
+        db.connection.commit()
+
+    def edit(self, prev_id):
+        cursor = db.connection.cursor()
+        cursor.execute(
+            f'UPDATE {self._ref} \
+            SET \
+                code = %s, \
+                name = %s \
+            WHERE id = %s;',
+            (self.code, self.name, prev_id))
+        db.connection.commit()
+
+    @classmethod
+    def get_one(cls, val):
+        cursor = db.connection.cursor()
+        cursor.execute(f'SELECT code, name \
+            FROM {cls._ref} WHERE {cls._primary} = %s LIMIT 1', (val,))
+        result = cursor.fetchone()
+        if result:
+            return cls(*result)
+        else:
+            return False
+
+    @classmethod
+    def get_paginated(cls,
+        page=1, per_page=50, sort='id', order='asc',
+        code=None, name=None):
+        params = []
+        query = f'SELECT * FROM {cls._ref} '
+        if code or name:
+            query += 'WHERE '
+            filters = []
+            if code:
+                filters.append('code LIKE %s ')
+                params.append(f'%{code}%')
+            if name:
+                filters.append('name LIKE %s ')
+                params.append(f'%{name}%')
+            query += 'AND '.join(filters)
+        query += f'ORDER BY {sort} {order} LIMIT {(page - 1) * per_page}, {per_page};'
+        cursor = db.connection.cursor()
+        cursor.execute(query, tuple(params) or None)
+        result = cursor.fetchall()
+        return starmap(cls, result)
+
+    @classmethod
+    def count_query(cls,
+        code=None, name=None, college=None):
+        params = []
+        query = f'SELECT COUNT(*) FROM {cls._ref} '
+        if code or name or college:
+            query += 'WHERE '
+            filters = []
+            # Make searches for id, firstname, and lastname partial
+            if code:
+                filters.append('code LIKE %s ')
+                params.append(f'%{code}%')
+            if name:
+                filters.append('name LIKE %s ')
+                params.append(f'%{name}%')
+            query += 'AND '.join(filters)
+        cursor = db.connection.cursor()
+        cursor.execute(query, tuple(params) or None)
+        result = cursor.fetchone()
+        return result[0]
 
 # SQLAlchemy
 
