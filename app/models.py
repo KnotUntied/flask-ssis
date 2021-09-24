@@ -6,8 +6,11 @@ from flask import current_app
 from app import db
 
 class Base(object):
-    _ref = 'student'
+    _ref = 'base'
     _primary = 'id'
+
+    def add(self):
+        pass
 
     @classmethod
     def count_all(cls):
@@ -21,6 +24,25 @@ class Base(object):
         pass
 
     @classmethod
+    def to_value_label(cls, value, label):
+        return (value, f'{label} ({value})')
+
+    @classmethod
+    def get_value_label(cls):
+        cursor = db.connection.cursor()
+        cursor.execute(f'SELECT code, name FROM {cls._ref} ORDER BY code ASC')
+        result = cursor.fetchall()
+        return list(starmap(cls.to_value_label, result))
+
+    @classmethod
+    def get_paginated(cls, page=1, per_page=50, sort='id', order='asc'):
+        pass
+
+    @classmethod
+    def count_query(cls):
+        pass
+
+    @classmethod
     def delete(cls, val):
         try:
             cursor = db.connection.cursor()
@@ -30,8 +52,10 @@ class Base(object):
         except:
             return False
 
-    def add(self):
-        pass
+    # https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database
+    # The __repr__ method tells Python how to print objects of this class
+    # def __repr__(self):
+    #     return '<Student {}>'.format(self._primary)
 
 class Student(Base):
     def __init__(self, id, firstname, lastname, course, year, gender):
@@ -62,7 +86,10 @@ class Student(Base):
         cursor.execute(f'SELECT id, firstname, lastname, course, year, gender \
             FROM {cls._ref} WHERE {cls._primary} = %s LIMIT 1', (val,))
         result = cursor.fetchone()
-        return Student(*result)
+        if result:
+            return Student(*result)
+        else:
+            return False
 
     @classmethod
     def get_paginated(cls,
@@ -132,13 +159,15 @@ class Student(Base):
         result = cursor.fetchone()
         return result[0]
 
-    # https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database
-    # The __repr__ method tells Python how to print objects of this class
-    def __repr__(self):
-        return '<Student {}>'.format(self.id)
-
 class Course(Base):
-    pass
+    def __init__(self, code, name, college):
+        self.code = code
+        self.name = name
+        self.college = college
+
+    _ref = 'course'
+    _primary = 'code'
+
     # code = db.Column(db.String(10), primary_key=True)
     # name = db.Column(db.String(50), nullable=False)
     # college = db.Column(db.String(5), db.ForeignKey('college.code', onupdate='CASCADE', ondelete='SET NULL'))

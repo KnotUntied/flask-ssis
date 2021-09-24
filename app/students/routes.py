@@ -68,7 +68,9 @@ def index():
 @bp.route('/add/', methods=['GET', 'POST'])
 def add():
     # TODO: Instruct user to create course if no courses created.
+    # Querying for choices has to be done in the view
     form = AddStudentForm()
+    form.course.choices = Course.get_value_label()
 
     # courses = Course.query.all()
     # form.course.choices = list(course.to_choice() for course in courses)
@@ -140,6 +142,7 @@ def delete(id):
 @bp.route('/search/', methods=['GET', 'POST'])
 def search():
     form = SearchStudentForm()
+    form.course.choices = Course.get_value_label()
 
     # courses = Course.query.all()
     # form.course.choices = list(course.to_choice() for course in courses)
