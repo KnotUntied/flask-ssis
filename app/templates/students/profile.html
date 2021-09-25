@@ -7,6 +7,7 @@
     <p>
     {{ student.lastname }}, {{ student.firstname }}
     </p>
-    <p>{{ course.name or 'Undefined' }} - {{ student.year }}</p>
+    <p>{{ college.name or 'Unknown college' }}</p>
+    <p>{{ '{} ({})'.format(course.name, course.code) if course.code else 'Unknown course' }} - {{ student.year }}</p>
     <p>{{ student.gender }}</p>
 {% endblock %}

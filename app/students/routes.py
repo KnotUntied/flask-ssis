@@ -5,7 +5,7 @@ from app import db
 from app.students import bp
 from app.students.forms import AddStudentForm, EditStudentForm, SearchStudentForm
 from app.main.forms import EmptyForm
-from app.models import Student, Course
+from app.models import Student, Course, College
 
 @bp.route('/index/')
 @bp.route('/')
@@ -92,7 +92,8 @@ def profile(id):
     # student = Student.query.filter_by(id=id).first_or_404()
     course = Course.get_one(student.course)
     # course = Course.query.get(student.course)
-    return render_template('students/profile.html', student=student, course=course)
+    college = College.get_one(course.college)
+    return render_template('students/profile.html', student=student, course=course, college=college)
 
 @bp.route('/edit/<id>/', methods=['GET', 'POST'])
 def edit(id):

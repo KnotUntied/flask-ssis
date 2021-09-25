@@ -5,5 +5,5 @@
     <hr>
     <p><a href="{{ url_for('courses.edit', code=course.code) }}">Edit</a></p>
     <p>{{ course.name }}</p>
-    <p>{{ college.name or 'Undefined' }} ({{ course.college or 'Undefined' }})</p>
+    <p>{{ '{} ({})'.format(college.name, college.code) if college.code else 'Unknown college' }}</p>
 {% endblock %}

@@ -26,6 +26,7 @@ flask run
 
 - Models need more consistent methods
 - Some hardcoded values, especially in forms
+- May want to list related elements in profiles (e.g. students under a particular course/college, courses under a particular college)
 
 ## Resources
 
