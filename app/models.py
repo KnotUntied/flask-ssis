@@ -72,8 +72,8 @@ class Student(Base):
     _ref = 'student'
     _primary = 'id'
 
-    years = ['1', '2', '3', '4', '5']
-    genders = ['Other', 'Male', 'Female']
+    YEARS = ['1', '2', '3', '4', '5']
+    GENDERS = ['Other', 'Male', 'Female']
 
     def add(self):
         cursor = db.connection.cursor()

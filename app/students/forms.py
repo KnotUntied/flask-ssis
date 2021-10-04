@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, SelectField, SelectMultipleField, StringField, SubmitField
+from wtforms import IntegerField, RadioField, SelectField, SelectMultipleField, StringField, SubmitField
 from wtforms.validators import ValidationError, AnyOf, DataRequired, Length, NumberRange, Regexp
 from wtforms.widgets import CheckboxInput
 from app.models import Student
@@ -20,11 +20,14 @@ class StudentForm(FlaskForm):
     course = SelectField(
         label='Course',
         validators=[DataRequired()])
-    year = IntegerField(label='Year Level', validators=[DataRequired(), NumberRange(min=1, max=4)])
-    gender = SelectField(
+    year = RadioField(
+        label='Year Level',
+        choices=Student.YEARS,
+        validators=[DataRequired(), AnyOf(values=Student.YEARS)])
+    gender = RadioField(
         label='Gender',
-        choices=Student.genders,
-        validators=[DataRequired(), AnyOf(values=Student.genders)])
+        choices=Student.GENDERS,
+        validators=[DataRequired(), AnyOf(values=Student.GENDERS)])
     submit = SubmitField(label='Submit')
 
 class AddStudentForm(StudentForm):
@@ -49,10 +52,10 @@ class SearchStudentForm(FlaskForm):
     year = MultiCheckboxField(
         label='Year Level',
         # 2-tuples are required for SelectMultipleField, for some reason
-        choices=[(y, y) for y in Student.years],
+        choices=[(y, y) for y in Student.YEARS],
         option_widget=CheckboxInput())
     gender = MultiCheckboxField(
         label='Gender',
-        choices=[(g, g) for g in Student.genders],
+        choices=[(g, g) for g in Student.GENDERS],
         option_widget=CheckboxInput())
     submit = SubmitField(label='Submit')

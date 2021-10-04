@@ -5,7 +5,46 @@
     <h1>{{ title }}</h1>
     <div class="row">
         <div class="col-md-4 form-group">
-            {{ wtf.quick_form(form) }}
+            <form class="form" method="post" role="form">
+                {{ form.hidden_tag() }}
+                {{ wtf.form_errors(form, hiddens="only") }}
+
+                {{ wtf.form_field(form.id) }}
+                {{ wtf.form_field(form.firstname) }}
+                {{ wtf.form_field(form.lastname) }}
+                {{ wtf.form_field(form.course) }}
+                <div class="form-group {{ 'has-error' if form.year.errors }}">
+                    {{ form.year.label(class_="control-label") }}
+                    <ul class="list-inline" id="year">
+                        {% for subfield in form.year %}
+                            <li>
+                                <label class="radio-inline">
+                                    {{ subfield }}{{ subfield.label }}
+                                </label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {% for error in form.year.errors %}
+                    <p class="help-block">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <div class="form-group {{ 'has-error' if form.gender.errors }}">
+                    {{ form.gender.label(class_="control-label") }}
+                    <ul class="list-inline" id="gender">
+                        {% for subfield in form.gender %}
+                            <li>
+                                <label class="radio-inline">
+                                    {{ subfield }}{{ subfield.label }}
+                                </label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {% for error in form.gender.errors %}
+                    <p class="help-block">{{ error }}</p>
+                    {% endfor %}
+                </div>
+                <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+            </form>
         </div>
     </div>
 {% endblock %}
