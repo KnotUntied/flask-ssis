@@ -19,7 +19,7 @@
                         {% for subfield in form.year %}
                             <li>
                                 <label class="radio-inline">
-                                    {{ subfield }}{{ subfield.label }}
+                                    {{ subfield(required='required') }}{{ subfield.label }}
                                 </label>
                             </li>
                         {% endfor %}
@@ -34,7 +34,7 @@
                         {% for subfield in form.gender %}
                             <li>
                                 <label class="radio-inline">
-                                    {{ subfield }}{{ subfield.label }}
+                                    {{ subfield(required='required') }}{{ subfield.label }}
                                 </label>
                             </li>
                         {% endfor %}
