@@ -4,7 +4,7 @@ Application is expected to have CRUDL and search functionality for students, cou
 
 ## Installation and Usage (Development)
 
-MySQL is required. Also see included SQL files.
+MySQL is required. Also see and execute included SQL files.
 ```sh
 mysqld --console
 ```
