@@ -14,7 +14,7 @@ class Config(object):
     MYSQL_PASSWORD = getenv("MYSQL_PASSWORD")
     MYSQL_DB = getenv("MYSQL_DB")
 
-    ITEMS_PER_PAGE = 50
+    ITEMS_PER_PAGE = 10
 
     # SQLALCHEMY_DATABASE_URI = getenv('DATABASE_URL') or \
     #     'sqlite:///' + path.join(basedir, 'app.db')
