@@ -12,8 +12,9 @@
     <div>
     </div>
     <div class="table-responsive">
-        <table class="table table-hover table-bordered table-condensed">
+        <table class="table table-hover table-bordered table-condensed student-table">
           <tr>
+            <th></th>
             <th>ID Number {{ utils.sort_icon(sort, order, 'id') }}</th>
             <th>Last Name {{ utils.sort_icon(sort, order, 'lastname') }}</th>
             <th>First Name {{ utils.sort_icon(sort, order, 'firstname') }}</th>
@@ -24,6 +25,15 @@
           </tr>
           {% for student in students %}
           <tr>
+            <td>
+                <a href="{{ url_for('students.profile', id=student.id) }}">
+                    {% if student.avatar %}
+                        <img src="{{ student.avatar }}" width="32" height="32">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/user.svg') }}" width="32" height="32">
+                    {% endif %}
+                </a>
+            </td>
             <td><a href="{{ url_for('students.profile', id=student.id) }}">{{ student.id }}</a></td>
             <td>{{ student.lastname }}</td>
             <td>{{ student.firstname }}</td>

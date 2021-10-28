@@ -3,7 +3,12 @@
 {% block app_content %}
     <h1>{{ course.code }}</h1>
     <hr>
-    <p><a href="{{ url_for('courses.edit', code=course.code) }}">Edit</a></p>
     <p>{{ course.name }}</p>
     <p>{{ '{} ({})'.format(college.name, college.code) if college.code else 'Unknown college' }}</p>
+    <form class="form-inline" method="post" action="{{ url_for('courses.delete', code=course.code) }}">
+        {{ form.csrf_token() }}
+        <a class="btn btn-default" href="{{ url_for('courses.edit', code=course.code) }}">Edit</a>
+        <button class="btn btn-danger" type="submit" onclick="return confirm('Are you sure you want to delete {{ course.code }}?')">Delete
+        </button>
+    </form>
 {% endblock %}

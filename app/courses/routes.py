@@ -56,7 +56,9 @@ def add():
 def profile(code):
     course = Course.get_one(code) or abort(404)
     college = College.get_one(course.college)
-    return render_template('courses/profile.html', course=course, college=college)
+
+    form = EmptyForm()
+    return render_template('courses/profile.html', course=course, college=college, form=form)
 
 @bp.route('/edit/<code>/', methods=['GET', 'POST'])
 def edit(code):

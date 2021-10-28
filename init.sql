@@ -24,5 +24,6 @@ CREATE TABLE student (
   course VARCHAR(10),
   year INT UNSIGNED NOT NULL,
   gender ENUM ('Other', 'Male', 'Female'),
+  avatar VARCHAR(300),
   FOREIGN KEY (course) REFERENCES course (code) ON UPDATE CASCADE ON DELETE SET NULL
 );

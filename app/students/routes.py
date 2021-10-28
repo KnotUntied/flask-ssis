@@ -96,7 +96,9 @@ def profile(id):
         college = College.get_one(course.college)
     else:
         college = False
-    return render_template('students/profile.html', student=student, course=course, college=college)
+
+    form = EmptyForm()
+    return render_template('students/profile.html', student=student, course=course, college=college, form=form)
 
 @bp.route('/edit/<id>/', methods=['GET', 'POST'])
 def edit(id):

@@ -3,6 +3,7 @@
     vertical-align: middle;
 }
 
+.student-table tr td:first-child,
 table tr td:last-child {
     white-space: nowrap;
     width: 1px;

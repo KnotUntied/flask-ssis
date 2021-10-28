@@ -61,13 +61,22 @@ class Base(object):
     #     return '<Student {}>'.format(self._primary)
 
 class Student(Base):
-    def __init__(self, id=None, firstname=None, lastname=None, course=None, year=None, gender=None):
+    def __init__(self,
+        id=None,
+        firstname=None,
+        lastname=None,
+        course=None,
+        year=None,
+        gender=None,
+        avatar=None):
+
         self.id = id
         self.firstname = firstname
         self.lastname = lastname
         self.course = course
         self.year = year
         self.gender = gender
+        self.avatar = avatar
 
     _ref = 'student'
     _primary = 'id'
@@ -78,9 +87,9 @@ class Student(Base):
     def add(self):
         cursor = db.connection.cursor()
         cursor.execute(
-            f'INSERT INTO {self._ref} (id, firstname, lastname, course, year, gender) \
-            VALUES (%s, %s, %s, %s, %s, %s);',
-            (self.id, self.firstname, self.lastname, self.course, self.year, self.gender))
+            f'INSERT INTO {self._ref} (id, firstname, lastname, course, year, gender, avatar) \
+            VALUES (%s, %s, %s, %s, %s, %s, %s);',
+            (self.id, self.firstname, self.lastname, self.course, self.year, self.gender, self.avatar))
         db.connection.commit()
 
     def edit(self, prev_id):
@@ -93,15 +102,16 @@ class Student(Base):
                 lastname = %s, \
                 course = %s, \
                 year = %s, \
-                gender = %s \
+                gender = %s, \
+                avatar = %s \
             WHERE id = %s;',
-            (self.id, self.firstname, self.lastname, self.course, self.year, self.gender, prev_id))
+            (self.id, self.firstname, self.lastname, self.course, self.year, self.gender, self.avatar, prev_id))
         db.connection.commit()
 
     @classmethod
     def get_one(cls, val):
         cursor = db.connection.cursor()
-        cursor.execute(f'SELECT id, firstname, lastname, course, year, gender \
+        cursor.execute(f'SELECT id, firstname, lastname, course, year, gender, avatar \
             FROM {cls._ref} WHERE {cls._primary} = %s LIMIT 1', (val,))
         result = cursor.fetchone()
         if result:
@@ -114,7 +124,7 @@ class Student(Base):
         page=1, per_page=50, sort='id', order='asc',
         id=None, firstname=None, lastname=None, course=None, year=None, gender=None):
         params = []
-        query = f'SELECT * FROM {cls._ref} '
+        query = f'SELECT id, firstname, lastname, course, year, gender, avatar FROM {cls._ref} '
         if id or firstname or lastname or course or year or gender:
             query += 'WHERE '
             filters = []
