@@ -4,9 +4,7 @@
     <h1>{{ student.id }}</h1>
     <hr>
     <p><a href="{{ url_for('students.edit', id=student.id) }}">Edit</a></p>
-    <p>
-    {{ student.lastname }}, {{ student.firstname }}
-    </p>
+    <p>{{ student.lastname }}, {{ student.firstname }}</p>
     <p>{{ college.name or 'Unknown college' }}</p>
     <p>{{ '{} ({})'.format(course.name, course.code) if course.code else 'Unknown course' }} - {{ student.year }}</p>
     <p>{{ student.gender }}</p>

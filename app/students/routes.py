@@ -92,7 +92,10 @@ def profile(id):
     # student = Student.query.filter_by(id=id).first_or_404()
     course = Course.get_one(student.course)
     # course = Course.query.get(student.course)
-    college = College.get_one(course.college)
+    if course:
+        college = College.get_one(course.college)
+    else:
+        college = False
     return render_template('students/profile.html', student=student, course=course, college=college)
 
 @bp.route('/edit/<id>/', methods=['GET', 'POST'])
