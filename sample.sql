@@ -10,11 +10,11 @@ INSERT INTO course (code, name, college) VALUES
     ('BSIS', 'Bachelor of Science in Information Systems', 'CCS');
 
 INSERT INTO student (id, firstname, lastname, course, year, gender) VALUES
-    ('2026-0001', 'Hotel', 'Trivago', 'BSCE', 2, 'Other'),
-    ('2026-0002', 'Hotel', 'Trivago', 'BSCE', 2, 'Other'),
-    ('2026-0003', 'Hotel', 'Trivago', 'BSCE', 2, 'Other'),
-    ('2026-0004', 'Hotel', 'Trivago', 'BSCE', 2, 'Other'),
-    ('2026-0005', 'Hotel', 'Trivago', 'BSCE', 2, 'Other'),
+    ('2026-0001', 'First', 'Year', 'BSCE', 1, 'Other'),
+    ('2026-0002', 'Second', 'Year', 'BSCE', 2, 'Other'),
+    ('2026-0003', 'Third', 'Year', 'BSCE', 3, 'Other'),
+    ('2026-0004', 'Fourth', 'Year', 'BSCE', 4, 'Other'),
+    ('2026-0005', 'Fifth', 'Year', 'BSCE', 5, 'Other'),
     ('2026-0006', 'Hotel', 'Trivago', 'BSCE', 2, 'Other'),
     ('2026-0007', 'Hotel', 'Trivago', 'BSCE', 2, 'Other'),
     ('2026-0008', 'Hotel', 'Trivago', 'BSCE', 2, 'Other'),
