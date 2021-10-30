@@ -1,12 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
-from wtforms.validators import ValidationError, DataRequired, Length
+from wtforms.validators import ValidationError, InputRequired, Length
 from app.models import College
 
 
 class CollegeForm(FlaskForm):
-    code = StringField(label='College Code', validators=[DataRequired(), Length(min=1, max=5)])
-    name = StringField(label='College Name', validators=[DataRequired(), Length(min=1, max=50)])
+    code = StringField(label='College Code', validators=[InputRequired(), Length(min=1, max=5)])
+    name = StringField(label='College Name', validators=[InputRequired(), Length(min=1, max=50)])
     submit = SubmitField(label='Submit')
 
 class AddCollegeForm(CollegeForm):

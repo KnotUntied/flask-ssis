@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, RadioField, SelectField, SelectMultipleField, StringField, SubmitField
-from wtforms.validators import ValidationError, AnyOf, DataRequired, Length, NumberRange, Regexp
+from wtforms import HiddenField, IntegerField, RadioField, SelectField, SelectMultipleField, StringField, SubmitField
+from wtforms.validators import ValidationError, AnyOf, InputRequired, Length, NumberRange, Regexp
 from wtforms.widgets import CheckboxInput
 from app.models import Student
 from app.main.forms import MultiCheckboxField
@@ -14,20 +14,21 @@ def validate_name(form, field):
                 f'Character {char} is not allowed in name.')
 
 class StudentForm(FlaskForm):
-    id = StringField(label='ID Number (YYYY-NNNN)', validators=[DataRequired(), Regexp(regex=r'\d{4}\-\d{4}$')])
-    firstname = StringField(label='First Name', validators=[DataRequired(), Length(min=1, max=50), validate_name])
-    lastname = StringField(label='Last Name', validators=[DataRequired(), Length(min=1, max=50), validate_name])
+    id = StringField(label='ID Number (YYYY-NNNN)', validators=[InputRequired(), Regexp(regex=r'\d{4}\-\d{4}$')])
+    firstname = StringField(label='First Name', validators=[InputRequired(), Length(min=1, max=50), validate_name])
+    lastname = StringField(label='Last Name', validators=[InputRequired(), Length(min=1, max=50), validate_name])
     course = SelectField(
         label='Course',
-        validators=[DataRequired()])
+        validators=[InputRequired()])
     year = RadioField(
         label='Year Level',
         choices=Student.YEARS,
-        validators=[DataRequired(), AnyOf(values=Student.YEARS)])
+        validators=[InputRequired(), AnyOf(values=Student.YEARS)])
     gender = RadioField(
         label='Gender',
         choices=Student.GENDERS,
-        validators=[DataRequired(), AnyOf(values=Student.GENDERS)])
+        validators=[InputRequired(), AnyOf(values=Student.GENDERS)])
+    photo = HiddenField()
     submit = SubmitField(label='Submit')
 
 class AddStudentForm(StudentForm):
