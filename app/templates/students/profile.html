@@ -2,9 +2,9 @@
 
 {% block app_content %}
     {% if student.avatar %}
-        <img src="{{ student.avatar }}" width="150" height="150">
+    <img src="{{ cloudinary_url(student.avatar, format='jpg', width=150, height=150, crop='fill', gravity='center')[0] }}" class="avatar">
     {% else %}
-        <img src="{{ url_for('static', filename='images/user.svg') }}" width="150" height="150">
+    <img src="{{ url_for('static', filename='images/user.svg') }}" class="avatar" width="150" height="150">
     {% endif %}
     <h3>{{ student.id }}</h3>
     <p>{{ student.lastname }}, {{ student.firstname }}</p>

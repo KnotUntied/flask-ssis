@@ -14,7 +14,14 @@ class Config(object):
     MYSQL_PASSWORD = getenv("MYSQL_PASSWORD")
     MYSQL_DB = getenv("MYSQL_DB")
 
+    CLOUDINARY_NAME = getenv("CLOUDINARY_NAME")
+    CLOUDINARY_KEY = getenv("CLOUDINARY_KEY")
+    CLOUDINARY_SECRET = getenv("CLOUDINARY_SECRET")
+
     ITEMS_PER_PAGE = 10
+
+    # max approx 10 MB
+    MAX_CONTENT_LENGTH = 1024 * 1024 * 10
 
     # SQLALCHEMY_DATABASE_URI = getenv('DATABASE_URL') or \
     #     'sqlite:///' + path.join(basedir, 'app.db')

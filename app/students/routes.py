@@ -1,6 +1,9 @@
 from flask import render_template, flash, redirect, request, url_for, current_app, abort
 from flask_paginate import Pagination, get_page_parameter
 
+from cloudinary.uploader import upload as cloudinary_upload
+from cloudinary.utils import cloudinary_url
+
 from app import db
 from app.students import bp
 from app.students.forms import AddStudentForm, EditStudentForm, SearchStudentForm
@@ -63,7 +66,8 @@ def index():
         pagination=pagination,
         form=form,
         sort=sort,
-        order=order)
+        order=order,
+        cloudinary_url=cloudinary_url)
 
 @bp.route('/add/', methods=['GET', 'POST'])
 def add():
@@ -77,7 +81,9 @@ def add():
 
     if form.validate_on_submit():
         new = Student()
+        cloudinary_response = cloudinary_upload(form.photo.data, upload_preset='ssis_student')
         form.populate_obj(new)
+        new.avatar = cloudinary_response['public_id']
         new.add()
         # db.session.add(student)
         # db.session.commit()
@@ -98,7 +104,8 @@ def profile(id):
         college = False
 
     form = EmptyForm()
-    return render_template('students/profile.html', student=student, course=course, college=college, form=form)
+    return render_template('students/profile.html', student=student, course=course, college=college,
+        form=form, cloudinary_url=cloudinary_url)
 
 @bp.route('/edit/<id>/', methods=['GET', 'POST'])
 def edit(id):

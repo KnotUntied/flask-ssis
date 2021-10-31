@@ -28,9 +28,9 @@
             <td>
                 <a href="{{ url_for('students.profile', id=student.id) }}">
                     {% if student.avatar %}
-                        <img src="{{ student.avatar }}" width="32" height="32">
+                        <img src="{{ cloudinary_url(student.avatar, format='jpg', width=32, height=32, crop='fill', gravity='center')[0] }}" class="avatar">
                     {% else %}
-                        <img src="{{ url_for('static', filename='images/user.svg') }}" width="32" height="32">
+                        <img src="{{ url_for('static', filename='images/user.svg') }}" class="avatar" width="32" height="32">
                     {% endif %}
                 </a>
             </td>

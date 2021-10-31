@@ -8,3 +8,7 @@ table tr td:last-child {
     white-space: nowrap;
     width: 1px;
 }
+
+.avatar {
+    border-radius: 50%;
+}

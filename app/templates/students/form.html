@@ -5,7 +5,7 @@
     <h1>{{ title }}</h1>
     <div class="row">
         <div class="col-md-4 form-group">
-            <form class="form" method="post" role="form">
+            <form class="form" method="post" enctype="multipart/form-data" role="form">
                 {{ form.hidden_tag() }}
                 {{ wtf.form_errors(form, hiddens="only") }}
 
@@ -43,6 +43,14 @@
                     <p class="help-block">{{ error }}</p>
                     {% endfor %}
                 </div>
+                {% if form.clear_photo %}
+                <!-- current photo -->
+                {% endif %}
+                {{ wtf.form_field(form.photo) }}
+                {% if form.clear_photo %}
+                {{ wtf.form_field(form.clear_photo) }}
+                {% endif %}
+                <!-- photo preview, updated via callbacks -->
                 <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
             </form>
         </div>

@@ -28,6 +28,10 @@ flask run
 - Some hardcoded values, especially in forms
 - May want to list related elements in profiles (e.g. students under a particular course/college, courses under a particular college)
 
+## TODOs
+
+- Use Cloudinary's upload widget instead of server-side upload (allows upload from third-party sources, allows for manual cropping, potentially improves performance by skipping this server and uploading straight to Cloudinary; lack of documentation, potential difficulties in editing/deleting avatars)
+
 ## Resources
 
 - [Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)

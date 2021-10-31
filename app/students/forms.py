@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import HiddenField, IntegerField, RadioField, SelectField, SelectMultipleField, StringField, SubmitField
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import BooleanField, IntegerField, RadioField, SelectField, SelectMultipleField, StringField, SubmitField
 from wtforms.validators import ValidationError, AnyOf, InputRequired, Length, NumberRange, Regexp
 from wtforms.widgets import CheckboxInput
 from app.models import Student
@@ -12,6 +13,9 @@ def validate_name(form, field):
         if char in excluded_chars:
             raise ValidationError(
                 f'Character {char} is not allowed in name.')
+
+def validate_avatar(form, field):
+    pass
 
 class StudentForm(FlaskForm):
     id = StringField(label='ID Number (YYYY-NNNN)', validators=[InputRequired(), Regexp(regex=r'\d{4}\-\d{4}$')])
@@ -28,8 +32,10 @@ class StudentForm(FlaskForm):
         label='Gender',
         choices=Student.GENDERS,
         validators=[InputRequired(), AnyOf(values=Student.GENDERS)])
-    photo = HiddenField()
-    submit = SubmitField(label='Submit')
+    # TODO: Validate if cloudinary URL works
+    photo = FileField(
+        label='Photo (max 10 MB, preferably square) (cancel via file upload dialog to clear)',
+        validators=[FileAllowed(['jpg', 'jpeg', 'png'], 'Only PNG or JPG files are allowed.')])
 
 class AddStudentForm(StudentForm):
     def validate_id(form, field):
@@ -39,6 +45,7 @@ class AddStudentForm(StudentForm):
             raise ValidationError('ID number has already been used.')
 
 class EditStudentForm(StudentForm):
+    clear_photo = BooleanField(label='Remove Photo')
     def validate_id(form, field):
         existing = Student.get_one(field.data)
         # existing = Student.query.filter_by(id=field.data).first()
