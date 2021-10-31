@@ -50,8 +50,22 @@
                 {% if form.clear_photo %}
                 {{ wtf.form_field(form.clear_photo) }}
                 {% endif %}
-                <!-- photo preview, updated via callbacks -->
+                <img src="{{ url_for('static', filename='images/user.svg') }}" id="new-avatar" class="avatar" width="150" height="150">
                 <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
+                <script type="text/javascript">
+                    const input = document.querySelector('#photo');
+                    const avatar = document.querySelector('#new-avatar');
+
+                    input.addEventListener('change', (event) => {
+                        // https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
+                        // potential memory leak?
+                        if (input.files[0]) {
+                            avatar.src = URL.createObjectURL(input.files[0]);
+                        } else {
+                            avatar.src = "{{ url_for('static', filename='images/user.svg') }}";
+                        }
+                    });
+                </script>
             </form>
         </div>
     </div>

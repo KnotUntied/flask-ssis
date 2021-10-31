@@ -12,3 +12,9 @@ table tr td:last-child {
 .avatar {
     border-radius: 50%;
 }
+
+#old-avatar, #new-avatar {
+    display: block;
+    margin-bottom: 5px;
+    object-fit: cover;
+}
