@@ -44,12 +44,15 @@
                     {% endfor %}
                 </div>
                 {% if form.clear_photo %}
-                <!-- current photo -->
-                {% endif %}
-                {{ wtf.form_field(form.photo) }}
-                {% if form.clear_photo %}
+                <label class="control-label" for="id">Current Photo</label>
+                    {% if student.avatar %}
+                    <img src="{{ cloudinary_url(student.avatar, format='jpg', width=150, height=150, crop='fill', gravity='center')[0] }}" id="old-avatar" class="avatar">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/user.svg') }}" id="old-avatar" class="avatar" width="150" height="150">
+                    {% endif %}
                 {{ wtf.form_field(form.clear_photo) }}
                 {% endif %}
+                {{ wtf.form_field(form.photo) }}
                 <img src="{{ url_for('static', filename='images/user.svg') }}" id="new-avatar" class="avatar" width="150" height="150">
                 <input class="btn btn-default" id="submit" name="submit" type="submit" value="Submit">
                 <script type="text/javascript">

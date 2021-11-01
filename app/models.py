@@ -66,9 +66,9 @@ class Student(Base):
         firstname=None,
         lastname=None,
         course=None,
-        year=None,
-        gender=None,
-        avatar=None):
+        year='1',
+        gender='Other',
+        avatar=''):
 
         self.id = id
         self.firstname = firstname

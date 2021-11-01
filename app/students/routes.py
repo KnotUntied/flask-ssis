@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, request, url_for, current_app, abort
 from flask_paginate import Pagination, get_page_parameter
 
-from cloudinary.uploader import upload as cloudinary_upload
+from cloudinary.uploader import upload as cloudinary_upload, destroy as cloudinary_destroy
 from cloudinary.utils import cloudinary_url
 
 from app import db
@@ -81,9 +81,10 @@ def add():
 
     if form.validate_on_submit():
         new = Student()
-        cloudinary_response = cloudinary_upload(form.photo.data, upload_preset='ssis_student')
         form.populate_obj(new)
-        new.avatar = cloudinary_response['public_id']
+        if form.photo.data:
+            cloudinary_response = cloudinary_upload(form.photo.data, upload_preset='ssis_student')
+            new.avatar = cloudinary_response['public_id']
         new.add()
         # db.session.add(student)
         # db.session.commit()
@@ -120,6 +121,13 @@ def edit(id):
     if form.validate_on_submit():
         updated = Student()
         form.populate_obj(updated)
+        if form.clear_photo.data and student.avatar:
+            student_avatar = student.avatar
+            student.avatar = ''
+            cloudinary_response = cloudinary_destroy(student_avatar)
+        elif form.photo.data:
+            cloudinary_response = cloudinary_upload(form.photo.data, upload_preset='ssis_student')
+            updated.avatar = cloudinary_response['public_id']
         updated.edit(student.id)
         # student.id        = form.id.data
         # student.firstname = form.firstname.data
@@ -130,13 +138,16 @@ def edit(id):
         # db.session.commit()
         flash('Edit successful.', 'success')
         return redirect(url_for('students.profile', id=updated.id))
-    return render_template('students/form.html', title='Edit Student', form=form)
+    return render_template('students/form.html', title='Edit Student', student=student,
+        form=form, cloudinary_url=cloudinary_url)
 
 # TODO: Retain index args after delete
 @bp.route('/delete/<id>/', methods=['POST'])
 def delete(id):
-    student = Student.get_one(id)
+    student = Student.get_one(id) or abort(404)
     Student.delete(id)
+    if student.avatar:
+        cloudinary_response = cloudinary_destroy(student.avatar)
     # student = Student.query.filter_by(id=id).first_or_404()
     flash('{} {} {} has been deleted.'.format(student.id, student.firstname, student.lastname), 'danger')
     return redirect(url_for('students.index'))
@@ -159,3 +170,16 @@ def search():
             year=form.year.data or None,
             gender=form.gender.data or None))
     return render_template('students/search.html', title='Search Student', form=form)
+
+# https://github.com/Whale67/Flask-Cloudinary/blob/master/app.py#L40
+# @bp.route('/signature', methods=['POST'])
+# def signature():
+#     values = request.values
+#     timestamp = values.get('data[timestamp]')
+#     public_id = values.get('data[public_id]')
+#     custom_coordinates = values.get('data[custom_coordinates]')
+#     api_secret = current_app.config['CLOUDINARY_SECRET']
+#     signature = 'callback=https://widget.cloudinary.com/cloudinary_cors.html&custom_coordinates=%s&public_id=%s&timestamp=%s&upload_preset=thka8ije%s' % (custom_coordinates,public_id,timestamp,api_secret)
+#     signature2 = signature.encode('utf-8')
+#     h = sha1(signature2).hexdigest()
+#     return '%s' % (h)
