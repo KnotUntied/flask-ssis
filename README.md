@@ -30,6 +30,7 @@ flask run
 
 ## TODOs
 
+- Hide photo field in Edit Student form if `Remove Photo` is selected
 - Use Cloudinary's upload widget instead of server-side upload (allows upload from third-party sources, allows for manual cropping, potentially improves performance by skipping this server and uploading straight to Cloudinary; lack of documentation, potential difficulties in editing/deleting avatars)
 
 ## Resources
