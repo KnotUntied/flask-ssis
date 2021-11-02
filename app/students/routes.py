@@ -83,7 +83,7 @@ def add():
         new = Student()
         form.populate_obj(new)
         if form.photo.data:
-            cloudinary_response = cloudinary_upload(form.photo.data, upload_preset='ssis_student')
+            cloudinary_response = cloudinary_upload(form.photo.data, upload_preset='ssis_student', invalidate=True)
             new.avatar = cloudinary_response['public_id']
         new.add()
         # db.session.add(student)
@@ -126,7 +126,7 @@ def edit(id):
             student.avatar = ''
             cloudinary_response = cloudinary_destroy(student_avatar)
         elif form.photo.data:
-            cloudinary_response = cloudinary_upload(form.photo.data, upload_preset='ssis_student')
+            cloudinary_response = cloudinary_upload(form.photo.data, upload_preset='ssis_student', invalidate=True)
             updated.avatar = cloudinary_response['public_id']
         updated.edit(student.id)
         # student.id        = form.id.data
